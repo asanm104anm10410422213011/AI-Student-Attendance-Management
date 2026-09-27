@@ -2,27 +2,33 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-students = []
+students = [
+    {"name": "Gayathri", "roll_no": "101"},
+    {"name": "Student 2", "roll_no": "102"},
+    {"name": "Student 3", "roll_no": "103"}
+]
+
+attendance = {}
 
 @app.route("/", methods=["GET", "POST"])
 def home():
 
     if request.method == "POST":
-        name = request.form["name"]
-        roll_no = request.form["roll_no"]
         date = request.form["date"]
-        status = request.form["status"]
 
-        students.append({
-            "name": name,
-            "roll_no": roll_no,
-            "date": date,
-            "status": status
-        })
+        attendance[date] = {}
+
+        for student in students:
+            roll_no = student["roll_no"]
+            status = request.form.get(roll_no, "Absent")
+            attendance[date][roll_no] = status
 
         return redirect("/")
 
-    return render_template("index.html", students=students)
+    return render_template(
+        "index.html",
+        students=students
+    )
 
 
 if __name__ == "__main__":
