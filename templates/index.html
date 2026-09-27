@@ -50,44 +50,78 @@
             border: none;
             cursor: pointer;
         }
+
+        .student {
+            background: #e3f2fd;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h1>📚 AI Student Attendance</h1>
-        <p>Student Attendance Management System</p>
-    </div>
+<div class="header">
+    <h1>📚 AI Student Attendance</h1>
+    <p>Student Attendance Management System</p>
+</div>
 
-    <div class="container">
+<div class="container">
 
-        <div class="card">
-            <h2>Student Details</h2>
+    <div class="card">
+        <h2>Mark Attendance</h2>
 
-            <input type="text" placeholder="Student Name">
+        <form method="POST">
 
-            <input type="text" placeholder="Roll Number">
+            <input type="text"
+                   name="name"
+                   placeholder="Student Name"
+                   required>
 
-            <input type="date">
+            <input type="text"
+                   name="roll_no"
+                   placeholder="Roll Number"
+                   required>
 
-            <select>
-                <option>Select Attendance</option>
-                <option>Present</option>
-                <option>Absent</option>
+            <input type="date"
+                   name="date"
+                   required>
+
+            <select name="status" required>
+                <option value="">Select Attendance</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
             </select>
 
-            <button>Mark Attendance</button>
+            <button type="submit">
+                Mark Attendance
+            </button>
+
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>📋 Attendance Records</h2>
+
+        {% for student in students %}
+
+        <div class="student">
+            <strong>{{ student.name }}</strong><br>
+            Roll No: {{ student.roll_no }}<br>
+            Date: {{ student.date }}<br>
+            Status: {{ student.status }}
         </div>
 
-        <div class="card">
-            <h2>📊 Attendance</h2>
+        {% else %}
 
-            <p>Attendance Percentage: <strong>0%</strong></p>
-            <p>AI Prediction: <strong>Coming Soon</strong></p>
-        </div>
+        <p>No attendance records yet.</p>
+
+        {% endfor %}
 
     </div>
+
+</div>
 
 </body>
 </html>
