@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>AI Student Attendance</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +26,7 @@
         .card {
             background: white;
             padding: 20px;
+            margin-bottom: 20px;
             border-radius: 12px;
             box-shadow: 0 2px 8px #ccc;
         }
@@ -67,6 +69,25 @@
             border-radius: 6px;
             font-size: 16px;
         }
+
+        .summary {
+            margin-top: 20px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #1565c0;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
@@ -86,6 +107,7 @@
         <form method="POST">
 
             <label><strong>Select Date:</strong></label><br>
+
             <input type="date" name="date" required>
 
             <table>
@@ -98,6 +120,7 @@
                 </tr>
 
                 {% for student in students %}
+
                 <tr>
                     <td>{{ student.name }}</td>
                     <td>{{ student.roll_no }}</td>
@@ -115,13 +138,37 @@
                                value="Absent">
                     </td>
                 </tr>
+
                 {% endfor %}
 
             </table>
 
-            <button type="submit">✅ Save Attendance</button>
+            <button type="submit">
+                ✅ Save Attendance
+            </button>
 
         </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>📊 Attendance Summary</h2>
+
+        {% for student in students %}
+
+        <div class="summary-card">
+
+            <strong>{{ student.name }}</strong><br>
+
+            Roll No: {{ student.roll_no }}<br>
+
+            Attendance: 0%
+
+        </div>
+
+        {% endfor %}
 
     </div>
 
