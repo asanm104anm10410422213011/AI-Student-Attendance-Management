@@ -14,6 +14,7 @@ def home():
 
         action = request.form.get("action")
 
+        # Add Student
         if action == "add_student":
             name = request.form["name"]
             roll_no = request.form["roll_no"]
@@ -25,6 +26,18 @@ def home():
 
             return redirect("/")
 
+        # Delete Student
+        if action == "delete_student":
+            roll_no = request.form["roll_no"]
+
+            students[:] = [
+                student for student in students
+                if student["roll_no"] != roll_no
+            ]
+
+            return redirect("/")
+
+        # Save Attendance
         if action == "attendance":
             date = request.form["date"]
 
