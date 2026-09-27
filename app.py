@@ -10,10 +10,12 @@ students = [
 
 attendance = {}
 
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 
     if request.method == "POST":
+
         date = request.form["date"]
 
         attendance[date] = {}
@@ -21,6 +23,7 @@ def home():
         for student in students:
             roll_no = student["roll_no"]
             status = request.form.get(roll_no, "Absent")
+
             attendance[date][roll_no] = status
 
         return redirect("/")
