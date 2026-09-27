@@ -2,11 +2,7 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-students = [
-    {"name": "Gayathri", "roll_no": "101"},
-    {"name": "Student 2", "roll_no": "102"},
-    {"name": "Student 3", "roll_no": "103"}
-]
+students = []
 
 attendance = {}
 
@@ -16,17 +12,30 @@ def home():
 
     if request.method == "POST":
 
-        date = request.form["date"]
+        action = request.form.get("action")
 
-        attendance[date] = {}
+        if action == "add_student":
+            name = request.form["name"]
+            roll_no = request.form["roll_no"]
 
-        for student in students:
-            roll_no = student["roll_no"]
-            status = request.form.get(roll_no, "Absent")
+            students.append({
+                "name": name,
+                "roll_no": roll_no
+            })
 
-            attendance[date][roll_no] = status
+            return redirect("/")
 
-        return redirect("/")
+        if action == "attendance":
+            date = request.form["date"]
+
+            attendance[date] = {}
+
+            for student in students:
+                roll_no = student["roll_no"]
+                status = request.form.get(roll_no, "Absent")
+                attendance[date][roll_no] = status
+
+            return redirect("/")
 
     return render_template(
         "index.html",
