@@ -280,25 +280,30 @@
 
     <div class="card">
 
-        <h2>📊 Attendance Summary</h2>
+       <!-- ATTENDANCE SUMMARY -->
 
-        {% for student in students %}
+<div class="card">
 
-        <div class="student">
+    <h2>📊 Attendance Summary</h2>
 
-            <span>
-                <strong>{{ student.name }}</strong><br>
-                Roll No: {{ student.roll_no }}<br>
-                Attendance: 0%
-            </span>
+    {% for item in student_summary %}
 
-        </div>
+    <div class="student">
 
-        {% endfor %}
+        <span>
+            <strong>{{ item.name }}</strong><br>
+            Roll No: {{ item.roll_no }}<br>
+            Attendance: <strong>{{ item.percentage }}%</strong>
+        </span>
 
     </div>
 
-</div>
+    {% else %}
 
+    <p>No students added yet.</p>
+
+    {% endfor %}
+
+</div>
 </body>
 </html>
