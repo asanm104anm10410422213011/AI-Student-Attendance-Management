@@ -51,7 +51,8 @@
             cursor: pointer;
         }
 
-        .add-button {
+        .add-button,
+        .save-button {
             width: 100%;
             margin-top: 15px;
             font-size: 16px;
@@ -91,13 +92,18 @@
             align-items: center;
         }
 
-        .save-button {
-            width: 100%;
-            margin-top: 20px;
-            font-size: 16px;
+        .low {
+            color: red;
+            font-weight: bold;
+        }
+
+        .good {
+            color: green;
+            font-weight: bold;
         }
 
         @media (max-width: 600px) {
+
             input {
                 width: 90%;
             }
@@ -124,7 +130,9 @@
     <p>Daily Attendance Management</p>
 </div>
 
+
 <div class="container">
+
 
     <!-- ADD STUDENT -->
 
@@ -134,7 +142,11 @@
 
         <form method="POST">
 
-            <input type="hidden" name="action" value="add_student">
+            <input
+                type="hidden"
+                name="action"
+                value="add_student"
+            >
 
             <input
                 type="text"
@@ -219,7 +231,11 @@
                 value="attendance"
             >
 
-            <label><strong>Select Date:</strong></label><br>
+            <label>
+                <strong>Select Date:</strong>
+            </label>
+
+            <br>
 
             <input
                 type="date"
@@ -240,25 +256,33 @@
 
                 <tr>
 
-                    <td>{{ student.name }}</td>
-
-                    <td>{{ student.roll_no }}</td>
+                    <td>
+                        {{ student.name }}
+                    </td>
 
                     <td>
+                        {{ student.roll_no }}
+                    </td>
+
+                    <td>
+
                         <input
                             type="radio"
                             name="{{ student.roll_no }}"
                             value="Present"
                             required
                         >
+
                     </td>
 
                     <td>
+
                         <input
                             type="radio"
                             name="{{ student.roll_no }}"
                             value="Absent"
                         >
+
                     </td>
 
                 </tr>
@@ -267,7 +291,10 @@
 
             </table>
 
-            <button type="submit" class="save-button">
+            <button
+                type="submit"
+                class="save-button"
+            >
                 ✅ Save Attendance
             </button>
 
@@ -280,30 +307,60 @@
 
     <div class="card">
 
-       <!-- ATTENDANCE SUMMARY -->
+        <h2>📊 Attendance Summary</h2>
 
-<div class="card">
+        {% for item in student_summary %}
 
-    <h2>📊 Attendance Summary</h2>
+        <div class="student">
 
-    {% for item in student_summary %}
+            <span>
 
-    <div class="student">
+                <strong>
+                    {{ item.name }}
+                </strong>
 
-        <span>
-            <strong>{{ item.name }}</strong><br>
-            Roll No: {{ item.roll_no }}<br>
-            Attendance: <strong>{{ item.percentage }}%</strong>
-        </span>
+                <br>
+
+                Roll No:
+                {{ item.roll_no }}
+
+                <br>
+
+                Attendance:
+                <strong>
+                    {{ item.percentage }}%
+                </strong>
+
+                {% if item.percentage < 75 %}
+
+                <p class="low">
+                    ⚠️ Low Attendance
+                </p>
+
+                {% else %}
+
+                <p class="good">
+                    ✅ Good Attendance
+                </p>
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+        {% else %}
+
+        <p>
+            No students added yet.
+        </p>
+
+        {% endfor %}
 
     </div>
 
-    {% else %}
-
-    <p>No students added yet.</p>
-
-    {% endfor %}
 
 </div>
+
 </body>
 </html>
