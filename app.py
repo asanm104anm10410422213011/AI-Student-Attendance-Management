@@ -50,9 +50,42 @@ def home():
 
             return redirect("/")
 
+    # Attendance Percentage
+    student_summary = []
+
+    for student in students:
+
+        roll_no = student["roll_no"]
+
+        total_days = 0
+        present_days = 0
+
+        for date_data in attendance.values():
+
+            if roll_no in date_data:
+
+                total_days += 1
+
+                if date_data[roll_no] == "Present":
+                    present_days += 1
+
+        if total_days > 0:
+            percentage = round(
+                (present_days / total_days) * 100, 2
+            )
+        else:
+            percentage = 0
+
+        student_summary.append({
+            "name": student["name"],
+            "roll_no": roll_no,
+            "percentage": percentage
+        })
+
     return render_template(
         "index.html",
-        students=students
+        students=students,
+        student_summary=student_summary
     )
 
 
