@@ -107,6 +107,16 @@
             font-weight: bold;
         }
 
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+
         @media (max-width: 600px) {
 
             input {
@@ -194,9 +204,7 @@
 
             <span>
 
-                👤 <strong>
-                    {{ student.name }}
-                </strong>
+                👤 <strong>{{ student.name }}</strong>
 
                 — Roll No:
                 {{ student.roll_no }}
@@ -268,15 +276,10 @@
             <table>
 
                 <tr>
-
                     <th>Name</th>
-
                     <th>Roll No</th>
-
                     <th>Present</th>
-
                     <th>Absent</th>
-
                 </tr>
 
 
@@ -284,13 +287,9 @@
 
                 <tr>
 
-                    <td>
-                        {{ student.name }}
-                    </td>
+                    <td>{{ student.name }}</td>
 
-                    <td>
-                        {{ student.roll_no }}
-                    </td>
+                    <td>{{ student.roll_no }}</td>
 
                     <td>
 
@@ -345,9 +344,7 @@
 
             <span>
 
-                <strong>
-                    {{ item.name }}
-                </strong>
+                <strong>{{ item.name }}</strong>
 
                 <br>
 
@@ -357,12 +354,8 @@
                 <br>
 
                 Attendance:
-                <strong>
-                    {{ item.percentage }}%
-                </strong>
+                <strong>{{ item.percentage }}%</strong>
 
-
-                <!-- LOW ATTENDANCE ALERT -->
 
                 {% if item.percentage < 75 %}
 
@@ -379,24 +372,18 @@
                 {% endif %}
 
 
-                <!-- AI PREDICTION -->
-
                 {% if item.prediction is not none %}
 
                 <p class="prediction">
-
                     🤖 AI Prediction:
                     {{ item.prediction }}
-
                 </p>
 
                 {% else %}
 
                 <p class="prediction">
-
                     🤖 AI Prediction:
                     Need more attendance data
-
                 </p>
 
                 {% endif %}
@@ -405,14 +392,81 @@
 
         </div>
 
+        {% else %}
+
+        <p>No students added yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ATTENDANCE HISTORY -->
+
+    <div class="card">
+
+        <h2>📅 Attendance History</h2>
+
+
+        {% if attendance_history %}
+
+        <table>
+
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Status</th>
+            </tr>
+
+
+            {% for record in attendance_history %}
+
+            <tr>
+
+                <td>
+                    {{ record.date }}
+                </td>
+
+                <td>
+                    {{ record.name }}
+                </td>
+
+                <td>
+                    {{ record.roll_no }}
+                </td>
+
+                <td>
+
+                    {% if record.status == "Present" %}
+
+                    <span class="present">
+                        ✅ Present
+                    </span>
+
+                    {% else %}
+
+                    <span class="absent">
+                        ❌ Absent
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
         {% else %}
 
         <p>
-            No students added yet.
+            No attendance history available.
         </p>
 
-        {% endfor %}
+        {% endif %}
 
     </div>
 
