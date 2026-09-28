@@ -1,18 +1,17 @@
 from flask import Flask, render_template, request, redirect
 from model import predict_attendance
 import sqlite3
+from datetime import date
 
 app = Flask(__name__)
 
 
-# Database connection
 def get_db():
     conn = sqlite3.connect("attendance.db")
     conn.row_factory = sqlite3.Row
     return conn
 
 
-# Create database tables
 def init_db():
     conn = get_db()
 
@@ -45,11 +44,11 @@ def home():
 
     conn = get_db()
 
-    # Add Student
     if request.method == "POST":
 
         action = request.form.get("action")
 
+        # Add Student
         if action == "add_student":
 
             name = request.form["name"]
@@ -60,14 +59,11 @@ def home():
                     "INSERT INTO students (name, roll_no) VALUES (?, ?)",
                     (name, roll_no)
                 )
-
                 conn.commit()
-
             except sqlite3.IntegrityError:
                 pass
 
             conn.close()
-
             return redirect("/")
 
 
@@ -95,16 +91,15 @@ def home():
         # Save Attendance
         if action == "attendance":
 
-            date = request.form["date"]
+            attendance_date = request.form["date"]
 
             students = conn.execute(
                 "SELECT * FROM students"
             ).fetchall()
 
-            # Remove existing attendance for same date
             conn.execute(
                 "DELETE FROM attendance WHERE date = ?",
-                (date,)
+                (attendance_date,)
             )
 
             for student in students:
@@ -122,7 +117,7 @@ def home():
                     (date, roll_no, status)
                     VALUES (?, ?, ?)
                     """,
-                    (date, roll_no, status)
+                    (attendance_date, roll_no, status)
                 )
 
             conn.commit()
@@ -131,10 +126,45 @@ def home():
             return redirect("/")
 
 
-    # Get Students
+    # Students
     students = conn.execute(
         "SELECT * FROM students ORDER BY id"
     ).fetchall()
+
+
+    # Dashboard
+    total_students = len(students)
+
+    today = date.today().isoformat()
+
+    today_present = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM attendance
+        WHERE date = ?
+        AND status = 'Present'
+        """,
+        (today,)
+    ).fetchone()[0]
+
+
+    today_absent = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM attendance
+        WHERE date = ?
+        AND status = 'Absent'
+        """,
+        (today,)
+    ).fetchone()[0]
+
+
+    total_days = conn.execute(
+        """
+        SELECT COUNT(DISTINCT date)
+        FROM attendance
+        """
+    ).fetchone()[0]
 
 
     # Attendance Summary
@@ -154,26 +184,23 @@ def home():
             (roll_no,)
         ).fetchall()
 
-        total_days = len(records)
+        total = len(records)
 
-        present_days = sum(
-            1 for record in records
+        present = sum(
+            1
+            for record in records
             if record["status"] == "Present"
         )
 
-        if total_days > 0:
-
+        if total > 0:
             percentage = round(
-                (present_days / total_days) * 100,
+                (present / total) * 100,
                 2
             )
-
         else:
-
             percentage = 0
 
 
-        # AI prediction data
         attendance_values = []
 
         for record in records:
@@ -220,7 +247,11 @@ def home():
         "index.html",
         students=students,
         student_summary=student_summary,
-        attendance_history=attendance_history
+        attendance_history=attendance_history,
+        total_students=total_students,
+        today_present=today_present,
+        today_absent=today_absent,
+        total_days=total_days
     )
 
 
