@@ -103,3 +103,8 @@ Attendance is converted into numerical values:
 ```text
 Present = 1
 Absent  = 0
+
+## 🔗 Project Links
+
+- 🌐 [Live Application](https://ai-student-attendance-management.onrender.com)
+- 💻 [GitHub Repository](https://github.com/asanm104anm10410422213011/AI-Student-Attendance-Management)
