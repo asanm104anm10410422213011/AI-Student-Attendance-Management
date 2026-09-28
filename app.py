@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect
+from model import predict_attendance
 
 app = Flask(__name__)
 
 students = []
-
 attendance = {}
 
 
@@ -50,7 +50,6 @@ def home():
 
             return redirect("/")
 
-    # Attendance Percentage
     student_summary = []
 
     for student in students:
@@ -59,6 +58,7 @@ def home():
 
         total_days = 0
         present_days = 0
+        attendance_values = []
 
         for date_data in attendance.values():
 
@@ -69,6 +69,10 @@ def home():
                 if date_data[roll_no] == "Present":
                     present_days += 1
 
+                attendance_values.append(
+                    1 if date_data[roll_no] == "Present" else 0
+                )
+
         if total_days > 0:
             percentage = round(
                 (present_days / total_days) * 100, 2
@@ -76,10 +80,13 @@ def home():
         else:
             percentage = 0
 
+        prediction = predict_attendance(attendance_values)
+
         student_summary.append({
             "name": student["name"],
             "roll_no": roll_no,
-            "percentage": percentage
+            "percentage": percentage,
+            "prediction": prediction
         })
 
     return render_template(
