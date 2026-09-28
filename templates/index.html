@@ -102,6 +102,11 @@
             font-weight: bold;
         }
 
+        .prediction {
+            color: #6a1b9a;
+            font-weight: bold;
+        }
+
         @media (max-width: 600px) {
 
             input {
@@ -126,8 +131,11 @@
 <body>
 
 <div class="header">
+
     <h1>📚 AI Student Attendance</h1>
+
     <p>Daily Attendance Management</p>
+
 </div>
 
 
@@ -162,7 +170,10 @@
                 required
             >
 
-            <button type="submit" class="add-button">
+            <button
+                type="submit"
+                class="add-button"
+            >
                 ➕ Add Student
             </button>
 
@@ -182,9 +193,16 @@
         <div class="student">
 
             <span>
-                👤 <strong>{{ student.name }}</strong>
-                — Roll No: {{ student.roll_no }}
+
+                👤 <strong>
+                    {{ student.name }}
+                </strong>
+
+                — Roll No:
+                {{ student.roll_no }}
+
             </span>
+
 
             <form method="POST">
 
@@ -200,7 +218,10 @@
                     value="{{ student.roll_no }}"
                 >
 
-                <button type="submit" class="delete-button">
+                <button
+                    type="submit"
+                    class="delete-button"
+                >
                     🗑️ Delete
                 </button>
 
@@ -243,14 +264,21 @@
                 required
             >
 
+
             <table>
 
                 <tr>
+
                     <th>Name</th>
+
                     <th>Roll No</th>
+
                     <th>Present</th>
+
                     <th>Absent</th>
+
                 </tr>
+
 
                 {% for student in students %}
 
@@ -291,6 +319,7 @@
 
             </table>
 
+
             <button
                 type="submit"
                 class="save-button"
@@ -308,6 +337,7 @@
     <div class="card">
 
         <h2>📊 Attendance Summary</h2>
+
 
         {% for item in student_summary %}
 
@@ -331,6 +361,9 @@
                     {{ item.percentage }}%
                 </strong>
 
+
+                <!-- LOW ATTENDANCE ALERT -->
+
                 {% if item.percentage < 75 %}
 
                 <p class="low">
@@ -345,9 +378,33 @@
 
                 {% endif %}
 
+
+                <!-- AI PREDICTION -->
+
+                {% if item.prediction is not none %}
+
+                <p class="prediction">
+
+                    🤖 AI Prediction:
+                    {{ item.prediction }}
+
+                </p>
+
+                {% else %}
+
+                <p class="prediction">
+
+                    🤖 AI Prediction:
+                    Need more attendance data
+
+                </p>
+
+                {% endif %}
+
             </span>
 
         </div>
+
 
         {% else %}
 
