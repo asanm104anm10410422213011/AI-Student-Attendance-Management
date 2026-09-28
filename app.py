@@ -50,6 +50,7 @@ def home():
 
             return redirect("/")
 
+    # Attendance Summary
     student_summary = []
 
     for student in students:
@@ -89,10 +90,29 @@ def home():
             "prediction": prediction
         })
 
+    # Attendance History
+    attendance_history = []
+
+    for date, records in attendance.items():
+
+        for student in students:
+
+            roll_no = student["roll_no"]
+
+            if roll_no in records:
+
+                attendance_history.append({
+                    "date": date,
+                    "name": student["name"],
+                    "roll_no": roll_no,
+                    "status": records[roll_no]
+                })
+
     return render_template(
         "index.html",
         students=students,
-        student_summary=student_summary
+        student_summary=student_summary,
+        attendance_history=attendance_history
     )
 
 
