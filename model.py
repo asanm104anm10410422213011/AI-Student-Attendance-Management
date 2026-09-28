@@ -1,19 +1,32 @@
 from sklearn.linear_model import LinearRegression
 import numpy as np
 
+
 def predict_attendance(attendance_values):
 
     if len(attendance_values) < 2:
         return None
 
-    X = np.array(range(1, len(attendance_values) + 1)).reshape(-1, 1)
+    X = np.array(
+        range(1, len(attendance_values) + 1)
+    ).reshape(-1, 1)
+
     y = np.array(attendance_values)
 
     model = LinearRegression()
+
     model.fit(X, y)
 
-    next_day = np.array([[len(attendance_values) + 1]])
+    next_day = np.array(
+        [[len(attendance_values) + 1]]
+    )
 
     prediction = model.predict(next_day)[0]
+
+    # Convert prediction into percentage
+    prediction = prediction * 100
+
+    # Keep value between 0 and 100
+    prediction = max(0, min(100, prediction))
 
     return round(prediction, 2)
