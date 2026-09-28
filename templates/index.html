@@ -19,7 +19,7 @@
 
         .container {
             width: 95%;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 25px auto;
         }
 
@@ -32,6 +32,36 @@
         }
 
         h2 {
+            color: #1565c0;
+        }
+
+        /* DASHBOARD */
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        .dashboard-card h3 {
+            margin: 5px 0;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .dashboard-card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
             color: #1565c0;
         }
 
@@ -117,7 +147,11 @@
             font-weight: bold;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
+
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
             input {
                 width: 90%;
@@ -135,6 +169,21 @@
                 font-size: 14px;
             }
         }
+
+        @media (max-width: 450px) {
+
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dashboard-card {
+                padding: 12px;
+            }
+
+            .dashboard-card p {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 
@@ -144,12 +193,39 @@
 
     <h1>📚 AI Student Attendance</h1>
 
-    <p>Daily Attendance Management</p>
+    <p>AI-Based Student Attendance Management System</p>
 
 </div>
 
 
 <div class="container">
+
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard">
+
+        <div class="dashboard-card">
+            <h3>👨‍🎓 Total Students</h3>
+            <p>{{ total_students }}</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>✅ Today Present</h3>
+            <p>{{ today_present }}</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>❌ Today Absent</h3>
+            <p>{{ today_absent }}</p>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>📅 Total Days</h3>
+            <p>{{ total_days }}</p>
+        </div>
+
+    </div>
 
 
     <!-- ADD STUDENT -->
@@ -211,7 +287,6 @@
 
             </span>
 
-
             <form method="POST">
 
                 <input
@@ -272,7 +347,6 @@
                 required
             >
 
-
             <table>
 
                 <tr>
@@ -282,14 +356,17 @@
                     <th>Absent</th>
                 </tr>
 
-
                 {% for student in students %}
 
                 <tr>
 
-                    <td>{{ student.name }}</td>
+                    <td>
+                        {{ student.name }}
+                    </td>
 
-                    <td>{{ student.roll_no }}</td>
+                    <td>
+                        {{ student.roll_no }}
+                    </td>
 
                     <td>
 
@@ -318,7 +395,6 @@
 
             </table>
 
-
             <button
                 type="submit"
                 class="save-button"
@@ -336,7 +412,6 @@
     <div class="card">
 
         <h2>📊 Attendance Summary</h2>
-
 
         {% for item in student_summary %}
 
@@ -407,7 +482,6 @@
 
         <h2>📅 Attendance History</h2>
 
-
         {% if attendance_history %}
 
         <table>
@@ -418,7 +492,6 @@
                 <th>Roll No</th>
                 <th>Status</th>
             </tr>
-
 
             {% for record in attendance_history %}
 
